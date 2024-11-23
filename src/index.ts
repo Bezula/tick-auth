@@ -5,8 +5,7 @@ const app = express();
 const port = process.env?.PORT ?? 8080;
 
 app.get("/", (req: Request, res: Response) => {
-  console.log(req.body);
-  console.log(res);
+  console.log("get works");
 
   res.status(200).send({});
 });
