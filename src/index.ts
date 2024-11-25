@@ -1,7 +1,6 @@
-import express, { Request, Response } from "express";
 import mongoose from "mongoose";
+import app from "./app";
 
-const app = express();
 const port = process.env?.PORT ?? 8080;
 
 const start = async () => {
@@ -12,12 +11,6 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
-
-  app.get("/", (req: Request, res: Response) => {
-    console.log("get works");
-
-    res.status(200).send({});
-  });
 
   app.listen(port, () => {
     console.log(`Listening on ports ${port}`);
