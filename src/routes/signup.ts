@@ -1,5 +1,7 @@
 import { Router, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { User } from "../models/user";
+import { BadRequestError } from "../errors";
 
 const router = Router();
 
@@ -9,14 +11,26 @@ router.post("/api/users/signup", async (req: Request, res: Response) => {
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    throw new Error("User is existing");
+    throw new BadRequestError("User is existing");
   }
 
   const user = User.build({ email, password });
 
   await user.save();
 
-  res.status(201).send(user);
+  const token = jwt.sign(
+    {
+      userId: user.id,
+      userEmail: user.email,
+    },
+    process.env.JWT_KEY!
+  );
+
+  req.session = {
+    jwt: token,
+  };
+
+  res.status(201).send({ user });
 });
 
 export { router as signupRouter };

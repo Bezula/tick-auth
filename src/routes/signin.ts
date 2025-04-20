@@ -2,10 +2,12 @@ import { Router, Request, Response } from "express";
 import { body } from "express-validator";
 import { User } from "../models/user";
 import { Password } from "../services/password";
+import jwt from "jsonwebtoken";
+import { UnauthorizedError } from "../errors/unauthorized";
 
 const router = Router();
 
-router.get(
+router.post(
   "/api/users/signin",
   [body("email").notEmpty().isEmail(), body("password").notEmpty()],
   async (req: Request, res: Response) => {
@@ -14,18 +16,25 @@ router.get(
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
-      throw new Error("User not exisiting");
+      throw new UnauthorizedError("User not exisiting");
     }
 
     const passwordMatch = Password.compare(existingUser.password, password);
     if (!passwordMatch) {
-      throw new Error("Password not matched");
+      throw new UnauthorizedError("Password not matched");
     }
 
-    // Generate jwt token
-    // req.session = {
-    //   jwt: 'string jwt'
-    // }
+    const token = jwt.sign(
+      {
+        userId: existingUser.id,
+        userEmail: existingUser.email,
+      },
+      process.env.JWT_KEY!
+    );
+
+    req.session = {
+      jwt: token,
+    };
 
     res.status(200).send(existingUser);
   }
