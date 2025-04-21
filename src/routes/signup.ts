@@ -5,7 +5,7 @@ import { BadRequestError } from "../errors";
 
 const router = Router();
 
-router.post("/api/users/signup", async (req: Request, res: Response) => {
+router.post("/api/auth/signup", async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   const existingUser = await User.findOne({ email });

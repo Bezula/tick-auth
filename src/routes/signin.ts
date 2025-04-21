@@ -8,7 +8,7 @@ import { UnauthorizedError } from "../errors/unauthorized";
 const router = Router();
 
 router.post(
-  "/api/users/signin",
+  "/api/auth/signin",
   [body("email").notEmpty().isEmail(), body("password").notEmpty()],
   async (req: Request, res: Response) => {
     const { email, password } = req.body;

@@ -4,7 +4,7 @@ import { currentUser } from "../middlewares/current-user";
 const router = Router();
 
 router.get(
-  "/api/users/currentuser",
+  "/api/auth/currentuser",
   currentUser,
   (req: Request, res: Response) => {
     res.status(201).send({
