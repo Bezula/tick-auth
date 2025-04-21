@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user";
-import { BadRequestError } from "../errors";
+import { BadRequestError } from "@ultickets/common";
 
 const router = Router();
 

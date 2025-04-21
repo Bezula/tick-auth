@@ -3,7 +3,7 @@ import { body } from "express-validator";
 import { User } from "../models/user";
 import { Password } from "../services/password";
 import jwt from "jsonwebtoken";
-import { UnauthorizedError } from "../errors/unauthorized";
+import { NotAuthorizedError } from "@ultickets/common";
 
 const router = Router();
 
@@ -16,12 +16,12 @@ router.post(
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
-      throw new UnauthorizedError("User not exisiting");
+      throw new NotAuthorizedError();
     }
 
     const passwordMatch = Password.compare(existingUser.password, password);
     if (!passwordMatch) {
-      throw new UnauthorizedError("Password not matched");
+      throw new NotAuthorizedError();
     }
 
     const token = jwt.sign(
