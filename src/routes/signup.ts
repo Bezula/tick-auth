@@ -20,8 +20,8 @@ router.post("/api/auth/signup", async (req: Request, res: Response) => {
 
   const token = jwt.sign(
     {
-      userId: user.id,
-      userEmail: user.email,
+      id: user.id,
+      email: user.email,
     },
     process.env.JWT_KEY!
   );
